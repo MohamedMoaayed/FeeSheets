@@ -1,7 +1,8 @@
+import 'package:fee_sheets/domain/list_bloc/list_bloc.dart';
 import 'package:fee_sheets/presentation/Screens/formScreen.dart';
+import 'package:fee_sheets/presentation/router/router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get/get_navigation/src/root/get_material_app.dart';
 
 import 'domain/form_bloc/form_bloc.dart';
 import 'infrastructure/locator.dart';
@@ -12,6 +13,7 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
+  final AppRouter _appRouter = AppRouter();
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -20,14 +22,18 @@ class MyApp extends StatelessWidget {
         BlocProvider<FormBloc>(
           create: (BuildContext context) => FormBloc(),
         ),
+        BlocProvider<ListBloc>(
+          create: (BuildContext context) => ListBloc(),
+        ),
       ],
-      child: GetMaterialApp(
+      child: MaterialApp(
+        onGenerateRoute: _appRouter.onGenerateRoute,
         theme: ThemeData(
           primaryColor: Colors.white,
           fontFamily: 'Gilory',
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
-        home: FormPage(),
+        home: FormScreen(),
         debugShowCheckedModeBanner: false,
       ),
     );

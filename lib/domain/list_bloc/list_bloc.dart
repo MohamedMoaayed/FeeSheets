@@ -14,5 +14,15 @@ class ListBloc extends Bloc<ListEvent, ListState> {
     ListEvent event,
   ) async* {
     // TODO: implement mapEventToState
+    try {
+      if (event is RowDeletedEvent) {
+        yield ListLoading();
+
+        // await insertIntoSheet();
+      }
+    } catch (error) {
+      yield ListError('Is the device online?');
+      rethrow;
+    }
   }
 }

@@ -1,9 +1,9 @@
 import 'dart:ui';
 
-import 'package:bottom_navy_bar/bottom_navy_bar.dart';
 import 'package:fee_sheets/domain/form_bloc/form_bloc.dart';
 import 'package:fee_sheets/infrastructure/locator.dart';
 import 'package:fee_sheets/infrastructure/savedValues.dart';
+import 'package:fee_sheets/presentation/Screens/listScreen.dart';
 
 import 'package:fee_sheets/presentation/Widgets/textField.dart';
 import 'package:flutter/material.dart';
@@ -11,8 +11,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 final _form = GlobalKey<FormState>();
 
-class FormPage extends StatelessWidget {
-  const FormPage({Key key}) : super(key: key);
+class FormScreen extends StatelessWidget {
+  const FormScreen({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -38,23 +38,6 @@ class FormPage extends StatelessWidget {
 
 Scaffold buildScaffold(BuildContext context) {
   return Scaffold(
-    bottomNavigationBar: BottomNavyBar(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      //  selectedIndex: _selectedIndex,
-      showElevation: true, // use this to remove appBar's elevation
-      onItemSelected: (index) => print("object"),
-      items: [
-        BottomNavyBarItem(
-          icon: Icon(Icons.add),
-          title: Text('Form'),
-          activeColor: Colors.red,
-        ),
-        BottomNavyBarItem(
-            icon: Icon(Icons.list_alt_rounded),
-            title: Text('Changes'),
-            activeColor: Colors.green),
-      ],
-    ),
     appBar: AppBar(
       title: Text.rich(TextSpan(
         style: TextStyle(
@@ -77,6 +60,26 @@ Scaffold buildScaffold(BuildContext context) {
         ],
       )),
       elevation: 00,
+      actions: [
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: InkWell(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) {
+                  return ListScreen();
+                }),
+              );
+            },
+            child: Icon(
+              Icons.list_alt,
+              color: Colors.redAccent,
+              size: 35,
+            ),
+          ),
+        )
+      ],
     ),
     body: Center(
       child: SingleChildScrollView(
