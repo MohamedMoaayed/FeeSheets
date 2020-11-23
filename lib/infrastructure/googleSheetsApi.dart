@@ -56,7 +56,7 @@ void fetchSheet() async {
 
   final cellsRow = await sheet.values.map.allRows();
   rows = cellsRow;
-  numberOfRows == rows.length;
+  numberOfRows = rows.length;
   print(cellsRow);
 }
 
