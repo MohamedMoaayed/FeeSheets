@@ -9,6 +9,15 @@ class ListLoading extends ListState {
   ListLoading();
 }
 
+class ListLoaded extends ListState {
+  ListLoaded();
+}
+
+class RowDeleted extends ListState {
+  final int row;
+  RowDeleted(this.row);
+}
+
 class ListError extends ListState {
   final String message;
   ListError(this.message);

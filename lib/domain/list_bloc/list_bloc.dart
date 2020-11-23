@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:fee_sheets/infrastructure/googleSheetsApi.dart';
 import 'package:meta/meta.dart';
 
 part 'list_event.dart';
@@ -13,12 +14,19 @@ class ListBloc extends Bloc<ListEvent, ListState> {
   Stream<ListState> mapEventToState(
     ListEvent event,
   ) async* {
-    // TODO: implement mapEventToState
     try {
+      if (event is LoadRowsEvent) {
+        yield ListInitial();
+        yield ListLoading();
+        await fetchSheet();
+        yield ListLoaded();
+      }
       if (event is RowDeletedEvent) {
         yield ListLoading();
+        await deleteRow();
+        await fetchSheet();
 
-        // await insertIntoSheet();
+        yield ListLoaded();
       }
     } catch (error) {
       yield ListError('Is the device online?');

@@ -21,6 +21,10 @@ const _credentials = r'''
 // your spreadsheet id
 const _spreadsheetId = '1ziddAKRQzZ6jVMvmPhJgKAPAcWywMKTK-mLmdvh7lHY';
 var savedInfo = locator<SavedValues>();
+List<Map> rows;
+var numberOfRows;
+var rowToBeDeleted;
+
 void insertIntoSheet() async {
   // init GSheets
   final gsheets = GSheets(_credentials);
@@ -38,6 +42,31 @@ void insertIntoSheet() async {
     'email': savedInfo.email,
   };
   await sheet.values.map.appendRow(newRow);
-  // prints {index: 5, letter: f, number: 6, label: f6}
+
   print(await sheet.values.map.lastRow());
+}
+
+void fetchSheet() async {
+  // init GSheets
+  final gsheets = GSheets(_credentials);
+  // fetch spreadsheet by its id
+  final ss = await gsheets.spreadsheet(_spreadsheetId);
+  // get worksheet by its title
+  var sheet = await ss.worksheetByTitle('Sheet1');
+
+  final cellsRow = await sheet.values.map.allRows();
+  rows = cellsRow;
+  numberOfRows == rows.length;
+  print(cellsRow);
+}
+
+void deleteRow() async {
+  final gsheets = GSheets(_credentials);
+  // fetch spreadsheet by its id
+  final ss = await gsheets.spreadsheet(_spreadsheetId);
+  // get worksheet by its title
+  var sheet = await ss.worksheetByTitle('Sheet1');
+  // create worksheet if it does not exist yet
+  sheet ??= await ss.addWorksheet('Sheet1');
+  await sheet.deleteRow(rowToBeDeleted + 2);
 }

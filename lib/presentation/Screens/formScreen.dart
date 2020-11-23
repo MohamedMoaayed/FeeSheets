@@ -74,8 +74,8 @@ Scaffold buildScaffold(BuildContext context) {
             },
             child: Icon(
               Icons.list_alt,
-              color: Colors.redAccent,
-              size: 35,
+              color: Colors.black,
+              size: 50,
             ),
           ),
         )
@@ -176,6 +176,7 @@ Scaffold buildScaffold(BuildContext context) {
                           BlocProvider.of<FormBloc>(context);
                       final formBloc = context.bloc<FormBloc>();
                       formBloc.add(SubmitEvent());
+
                       Scaffold.of(context).showSnackBar(
                         SnackBar(
                           content: Text("Yay! we recived your Info. Thanks!"),

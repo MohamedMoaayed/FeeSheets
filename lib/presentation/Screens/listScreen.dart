@@ -1,5 +1,5 @@
 import 'package:fee_sheets/domain/list_bloc/list_bloc.dart';
-import 'package:fee_sheets/presentation/Screens/formScreen.dart';
+import 'package:fee_sheets/infrastructure/googleSheetsApi.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -46,12 +46,40 @@ class ListScreen extends StatelessWidget {
         builder: (context, state) {
           // return widget here based on Bloc's state
           if (state is ListInitial) {
-            return buildCards();
+            return Column(children: [
+              Center(
+                child: Text("Welcome"),
+              ),
+              FlatButton(
+                  padding: const EdgeInsets.all(10.0),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(5)),
+                  color: Color.fromRGBO(59, 159, 108, 100),
+                  child: Text(
+                    'Show the Contects',
+                    style: TextStyle(
+                        fontFamily: 'Gilroy',
+                        color: Colors.white,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold),
+                    textAlign: TextAlign.left,
+                  ),
+                  onPressed: () {
+                    final ListBloc rowBloc = BlocProvider.of<ListBloc>(context);
+                    final rowsBloc = context.bloc<ListBloc>();
+                    rowsBloc.add(LoadRowsEvent());
+                  })
+            ]);
           } else if (state is ListLoading) {
-            return buildScaffold(context);
+            return CircularProgressIndicator();
+          } else if (state is ListLoaded) {
+            return buildCards();
           }
           {
-            return buildScaffold(context);
+            return CircularProgressIndicator(
+              backgroundColor: Colors.cyanAccent,
+              valueColor: new AlwaysStoppedAnimation<Color>(Colors.red),
+            );
           }
         },
       ),
@@ -60,6 +88,7 @@ class ListScreen extends StatelessWidget {
 
   Widget buildCards() {
     return ListView.builder(
+      itemCount: numberOfRows,
       itemBuilder: (context, index) => Container(
         padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
         // height: 220,
@@ -80,7 +109,7 @@ class ListScreen extends StatelessWidget {
                     padding: EdgeInsets.all(6),
                     // width: 300,
                     child: Text(
-                      'Name',
+                      rows[index]['name'],
                       overflow: TextOverflow.fade,
                       maxLines: 1,
                       softWrap: false,
@@ -96,7 +125,7 @@ class ListScreen extends StatelessWidget {
                       Container(
                         padding: EdgeInsets.all(6),
                         child: Text(
-                          'Mobile number',
+                          rows[index]['mobile'],
                           overflow: TextOverflow.fade,
                           maxLines: 1,
                           softWrap: false,
@@ -115,7 +144,7 @@ class ListScreen extends StatelessWidget {
                       Container(
                         padding: EdgeInsets.all(6),
                         child: Text(
-                          'Date',
+                          rows[index]['date'],
                           overflow: TextOverflow.fade,
                           maxLines: 1,
                           softWrap: false,
@@ -133,7 +162,7 @@ class ListScreen extends StatelessWidget {
                       Container(
                         padding: EdgeInsets.all(6),
                         child: Text(
-                          'Model Number',
+                          rows[index]['model'],
                           overflow: TextOverflow.fade,
                           maxLines: 1,
                           softWrap: false,
@@ -152,7 +181,7 @@ class ListScreen extends StatelessWidget {
                       Container(
                         padding: EdgeInsets.all(6),
                         child: Text(
-                          'E-mail',
+                          rows[index]['email'],
                           overflow: TextOverflow.fade,
                           maxLines: 1,
                           softWrap: false,
@@ -188,9 +217,14 @@ class ListScreen extends StatelessWidget {
                         ],
                       ),
                       onPressed: () {
+                        final ListBloc rowBloc =
+                            BlocProvider.of<ListBloc>(context);
+                        final rowsBloc = context.bloc<ListBloc>();
+                        rowToBeDeleted = index;
+                        rowsBloc.add(RowDeletedEvent());
                         Scaffold.of(context).showSnackBar(
                           SnackBar(
-                            content: Text("Yay! we recived your Info. Thanks!"),
+                            content: Text("Deletion done"),
                           ),
                         );
                       }),

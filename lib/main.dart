@@ -1,5 +1,5 @@
 import 'package:fee_sheets/domain/list_bloc/list_bloc.dart';
-import 'package:fee_sheets/presentation/Screens/formScreen.dart';
+import 'package:fee_sheets/presentation/Screens/splashScreen.dart';
 import 'package:fee_sheets/presentation/router/router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -33,7 +33,7 @@ class MyApp extends StatelessWidget {
           fontFamily: 'Gilory',
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
-        home: FormScreen(),
+        home: SplashScreen(),
         debugShowCheckedModeBanner: false,
       ),
     );
